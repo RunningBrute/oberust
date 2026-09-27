@@ -1,4 +1,3 @@
-
 pub struct Config {
     _input_filename: String,
     output_filename: Option<String>,
@@ -10,7 +9,7 @@ impl Config {
 
         let output_opt = args.iter().find(|&x| *x == "-o");
 
-        let mut arguments = Config{
+        let mut arguments = Config {
             _input_filename: input.clone(),
             output_filename: Some(String::from("default_bin_name")),
         };
