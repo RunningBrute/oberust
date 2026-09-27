@@ -4,23 +4,20 @@ mod configuration {
 
     pub struct Config {
         input_filename: String,
-        output_filename: Option<String>
+        output_filename: Option<String>,
     }
 
-
     impl Config {
-        pub fn new(args: &Vec<String>) -> Result<Self, String>{
+        pub fn new(args: &Vec<String>) -> Result<Self, String> {
             let input = args.get(1).expect("Source file needed");
-/*
-            match args.get(2) {
-                Some(option) => {
-                    if option == "-o" {
 
-                    }
-                }
-                None => 
+            let output_opt = args.iter().find(|&x| *x == String::from("-o"));
+
+            match output_opt {
+                Some(_) => println!("-o found"),
+                None => println!("no -o option"),
             }
-*/
+
             let binary = args.get(3).expect("Binary name needed.");
 
             let arguments = Self {
@@ -36,8 +33,7 @@ mod configuration {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
 
-    let _config = Config::new(&args).unwrap_or_else(|e: String|{ panic!("{}", e)});
-
+    let _config = Config::new(&args).unwrap_or_else(|e: String| panic!("{}", e));
 
     println!("Hello Oberust!")
 }
