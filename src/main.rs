@@ -2,6 +2,7 @@ use crate::configuration::Config;
 
 mod configuration {
 
+
     pub struct Config {
         input_filename: String,
         output_filename: Option<String>,
@@ -11,19 +12,17 @@ mod configuration {
         pub fn new(args: &Vec<String>) -> Result<Self, String> {
             let input = args.get(1).expect("Source file needed");
 
-            let output_opt = args.iter().find(|&x| *x == String::from("-o"));
+            let output_opt = args.iter().find(|&x| *x == "-o");
+
+            let mut arguments = Config{
+                input_filename: input.clone(),
+                output_filename: Some(String::from("default_bin_name")),
+            };
 
             match output_opt {
-                Some(_) => println!("-o found"),
-                None => println!("no -o option"),
+                Some(_) => arguments.output_filename = args.get(3).cloned(),
+                _ => {}
             }
-
-            let binary = args.get(3).expect("Binary name needed.");
-
-            let arguments = Self {
-                input_filename: input.clone(),
-                output_filename: Some(binary.clone()),
-            };
 
             Ok(arguments)
         }
