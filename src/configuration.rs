@@ -22,3 +22,17 @@ impl Config {
         Ok(arguments)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::configuration::Config;
+
+    #[test]
+    #[should_panic(expected="Source file needed")]
+    fn source_file_is_needed()
+    {
+        let args = vec![String::from("home/some_app")];
+        let _config = Config::new(&args);
+    }
+
+}
