@@ -1,5 +1,5 @@
 pub struct Config {
-    _input_filename: String,
+    input_filename: String,
     output_filename: Option<String>,
 }
 
@@ -10,7 +10,7 @@ impl Config {
         let output_opt = args.iter().find(|&x| *x == "-o");
 
         let mut arguments = Config {
-            _input_filename: input.clone(),
+            input_filename: input.clone(),
             output_filename: Some(String::from("default_bin_name")),
         };
 
@@ -29,10 +29,31 @@ mod tests {
 
     #[test]
     #[should_panic(expected="Source file needed")]
-    fn source_file_is_needed()
-    {
-        let args = vec![String::from("home/some_app")];
+    fn source_file_is_needed(){
+        let args = vec![String::from("home/my_app")];
+        assert_eq!(args.len(), 1);
+
         let _config = Config::new(&args);
+    }
+
+    #[test]
+    fn only_source_file_is_provided_and_binary_name_is_default(){
+        let args = vec![String::from("home/my_app"), String::from("source_file.Mod")];
+        assert_eq!(args.len(), 2);
+
+        let config = Config::new(&args).unwrap();
+        assert_eq!(config.input_filename, String::from("source_file.Mod"));
+        assert_eq!(config.output_filename, Some(String::from("default_bin_name")));
+    }
+
+    #[test]
+    fn binary_name_is_provided_too(){
+        let args = vec![String::from("home/my_app"), String::from("source_file.Mod"), String::from("-o"), String::from("my_binary")];
+        assert_eq!(args.len(), 4);
+
+        let config = Config::new(&args).unwrap();
+        assert_eq!(config.input_filename, String::from("source_file.Mod"));
+        assert_eq!(config.output_filename, Some(String::from("my_binary")));
     }
 
 }
