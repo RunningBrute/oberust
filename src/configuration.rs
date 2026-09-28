@@ -29,7 +29,7 @@ mod tests {
 
     #[test]
     #[should_panic(expected = "Source file needed")]
-    fn source_file_is_needed() {
+    fn when_source_file_is_not_provided_then_panic() {
         let args = vec![String::from("home/my_app")];
         assert_eq!(args.len(), 1);
 
@@ -37,7 +37,7 @@ mod tests {
     }
 
     #[test]
-    fn only_source_file_is_provided_and_binary_name_is_default() {
+    fn when_source_file_is_provided_then_use_default_binary_name() {
         let args = vec![String::from("home/my_app"), String::from("source_file.Mod")];
         assert_eq!(args.len(), 2);
 
@@ -50,7 +50,17 @@ mod tests {
     }
 
     #[test]
-    fn binary_name_is_provided_too() {
+    #[should_panic(expected="")]
+    fn when_binary_name_is_requested_but_not_provied_then_panic() {
+        let args = vec![
+            String::from("home/my_app"),
+            String::from("source_file.Mod"),
+            String::from("-o")];
+        let _config = Config::new(&args).unwrap();
+    }
+
+    #[test]
+    fn when_binary_name_and_source_file_is_provided_then_config_is_complete() {
         let args = vec![
             String::from("home/my_app"),
             String::from("source_file.Mod"),
