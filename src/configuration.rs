@@ -28,8 +28,8 @@ mod tests {
     use crate::configuration::Config;
 
     #[test]
-    #[should_panic(expected="Source file needed")]
-    fn source_file_is_needed(){
+    #[should_panic(expected = "Source file needed")]
+    fn source_file_is_needed() {
         let args = vec![String::from("home/my_app")];
         assert_eq!(args.len(), 1);
 
@@ -37,23 +37,30 @@ mod tests {
     }
 
     #[test]
-    fn only_source_file_is_provided_and_binary_name_is_default(){
+    fn only_source_file_is_provided_and_binary_name_is_default() {
         let args = vec![String::from("home/my_app"), String::from("source_file.Mod")];
         assert_eq!(args.len(), 2);
 
         let config = Config::new(&args).unwrap();
         assert_eq!(config.input_filename, String::from("source_file.Mod"));
-        assert_eq!(config.output_filename, Some(String::from("default_bin_name")));
+        assert_eq!(
+            config.output_filename,
+            Some(String::from("default_bin_name"))
+        );
     }
 
     #[test]
-    fn binary_name_is_provided_too(){
-        let args = vec![String::from("home/my_app"), String::from("source_file.Mod"), String::from("-o"), String::from("my_binary")];
+    fn binary_name_is_provided_too() {
+        let args = vec![
+            String::from("home/my_app"),
+            String::from("source_file.Mod"),
+            String::from("-o"),
+            String::from("my_binary"),
+        ];
         assert_eq!(args.len(), 4);
 
         let config = Config::new(&args).unwrap();
         assert_eq!(config.input_filename, String::from("source_file.Mod"));
         assert_eq!(config.output_filename, Some(String::from("my_binary")));
     }
-
 }
