@@ -1,0 +1,3 @@
+MODULE Empty;
+BEGIN
+END Empty.
