@@ -4,20 +4,28 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &Vec<String>) -> Result<Self, String> {
-        let input = args.get(1).expect("Source file needed");
-
-        let output_opt = args.iter().find(|&x| *x == "-o");
-
+    pub fn new<T: Iterator<Item = String>>(args: &mut T) -> Result<Self, String> {
         let mut arguments = Config {
-            input_filename: input.clone(),
-            output_filename: Some(String::from("default_bin_name")),
+            input_filename: String::from(""),
+            output_filename: None,
         };
 
-        match output_opt {
-            Some(_) => arguments.output_filename = args.get(3).cloned(),
-            _ => {}
-        }
+        // program name should be skipped
+        let mut args = args.skip(1);
+        
+        // first will be source file name
+        arguments.input_filename = match args.next() {
+            Some(name) => name,
+            None => panic!("Source file needed"),
+        };
+
+        // then after -o option could be name of the output binary
+        if args.next() == Some(String::from("-o")) {
+            arguments.output_filename = match args.next() {
+                Some(name) => Some(name),
+                None => panic!("Binary name missing"),
+            };
+        };
 
         Ok(arguments)
     }
@@ -33,7 +41,7 @@ mod tests {
         let args = vec![String::from("home/my_app")];
         assert_eq!(args.len(), 1);
 
-        let _config = Config::new(&args);
+        let _config = Config::new(&mut args.into_iter());
     }
 
     #[test]
@@ -41,11 +49,11 @@ mod tests {
         let args = vec![String::from("home/my_app"), String::from("source_file.Mod")];
         assert_eq!(args.len(), 2);
 
-        let config = Config::new(&args).unwrap();
+        let config = Config::new(&mut args.into_iter()).unwrap();
         assert_eq!(config.input_filename, String::from("source_file.Mod"));
         assert_eq!(
             config.output_filename,
-            Some(String::from("default_bin_name"))
+            None
         );
     }
 
@@ -56,7 +64,7 @@ mod tests {
             String::from("home/my_app"),
             String::from("source_file.Mod"),
             String::from("-o")];
-        let _config = Config::new(&args).unwrap();
+        let _config = Config::new(&mut args.into_iter()).unwrap();
     }
 
     #[test]
@@ -69,7 +77,7 @@ mod tests {
         ];
         assert_eq!(args.len(), 4);
 
-        let config = Config::new(&args).unwrap();
+        let config = Config::new(&mut args.into_iter()).unwrap();
         assert_eq!(config.input_filename, String::from("source_file.Mod"));
         assert_eq!(config.output_filename, Some(String::from("my_binary")));
     }
