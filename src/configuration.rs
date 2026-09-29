@@ -4,7 +4,10 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new<T: Iterator<Item = String>>(args: &mut T) -> Result<Self, String> {
+    pub fn new<T>(args: &mut T) -> Result<Self, String>
+    where
+        T: Iterator<Item = String>
+    {
         let mut arguments = Config {
             input_filename: String::from(""),
             output_filename: None,
