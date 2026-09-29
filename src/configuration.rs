@@ -1,6 +1,6 @@
 pub struct Config {
-    input_filename: String,
-    output_filename: Option<String>,
+    pub input_filename: String,
+    pub output_filename: Option<String>,
 }
 
 impl Config {
