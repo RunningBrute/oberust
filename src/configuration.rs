@@ -12,7 +12,7 @@ impl Config {
 
         // program name should be skipped
         let mut args = args.skip(1);
-        
+
         // first will be source file name
         arguments.input_filename = match args.next() {
             Some(name) => name,
@@ -51,19 +51,17 @@ mod tests {
 
         let config = Config::new(&mut args.into_iter()).unwrap();
         assert_eq!(config.input_filename, String::from("source_file.Mod"));
-        assert_eq!(
-            config.output_filename,
-            None
-        );
+        assert_eq!(config.output_filename, None);
     }
 
     #[test]
-    #[should_panic(expected="")]
+    #[should_panic(expected = "")]
     fn when_binary_name_is_requested_but_not_provied_then_panic() {
         let args = vec![
             String::from("home/my_app"),
             String::from("source_file.Mod"),
-            String::from("-o")];
+            String::from("-o"),
+        ];
         let _config = Config::new(&mut args.into_iter()).unwrap();
     }
 
