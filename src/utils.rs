@@ -17,3 +17,23 @@ impl FileReader {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::{fs::File, io::Write, path::Path};
+
+    use crate::FileReader;
+
+    #[test]
+    fn file_reader_returns_empty_content_if_input_file_is_empty() {
+        let path_to_empty_file = Path::new("empty_file.ob2");
+        let mut empty_file = File::create(path_to_empty_file).unwrap();
+        empty_file.write(String::from("").as_bytes()).unwrap();
+
+        let file_reader = FileReader::new(path_to_empty_file).unwrap();
+
+        assert_eq!(file_reader.content, "");
+
+        std::fs::remove_file(path_to_empty_file).unwrap();
+    }
+}
