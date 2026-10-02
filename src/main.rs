@@ -3,8 +3,8 @@ use std::path::Path;
 use crate::{configuration::Config, utils::FileReader};
 
 mod configuration;
-mod utils;
 mod lexer;
+mod utils;
 
 fn main() {
     let mut args = std::env::args();
