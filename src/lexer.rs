@@ -14,10 +14,10 @@ pub fn tokenize(content: &str) -> Vec<&str> {
         token_begin = token_end + 1;
         println!("Try to find end index: {}:{}", token_begin, content_size);
         token_end = match find_end_of_current_token(&content[token_begin..content_size]) {
-            Some (value) => value,
-            None => break
+            Some(value) => value,
+            None => break,
         };
-        token_end = token_end + (content_size - 2 - token_begin -1);
+        token_end = token_end + (content_size - 2 - token_begin - 1);
     }
 
     tokens
@@ -32,7 +32,7 @@ pub fn find_beggining_of_next_token(content: &str) -> Option<usize> {
                 return None;
             }
         }
-        None => None
+        None => None,
     }
 }
 
@@ -40,17 +40,17 @@ pub fn find_end_of_current_token(content: &str) -> Option<usize> {
     println!("Searching slice: {}", content);
     match content.find(|c: char| c.is_whitespace()) {
         Some(value) => Some(value),
-        None => None
+        None => None,
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::lexer::{find_beggining_of_next_token, find_end_of_current_token};
     use crate::lexer::tokenize;
+    use crate::lexer::{find_beggining_of_next_token, find_end_of_current_token};
 
     #[test]
-    pub fn check_if_i_understand_whitspace_correctly(){
+    pub fn check_if_i_understand_whitspace_correctly() {
         assert_eq!(' '.is_whitespace(), true);
         assert_eq!('\n'.is_whitespace(), true);
     }
