@@ -27,17 +27,18 @@ pub fn find_beggining_of_next_token(content: &str) -> Option<usize> {
         Some(value) => {
             if value < content.len() - 1 {
                 return Some(value + 1);
+            } else {
+                return None;
             }
-            else { return None; }
         }
-        None => None
+        None => None,
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::lexer::tokenize;
     use crate::lexer::find_beggining_of_next_token;
+    use crate::lexer::tokenize;
 
     #[test]
     pub fn find_text_token_starting_index() {
@@ -61,5 +62,5 @@ mod tests {
         let tokens = tokenize(&content);
 
         assert_eq!(tokens, vec!("foo", "bar", "foo"));
-    }    
+    }
 }
