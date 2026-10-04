@@ -2,22 +2,24 @@ use std::fmt::Error;
 
 pub fn tokenize(content: &str) -> Vec<&str> {
     let mut tokens: Vec<&str> = Vec::new();
-    let mut token_begin = 0;
-    let mut token_end = find_end_of_current_token(&content).expect("ble vle ble");
-    let content_size = content.chars().count();
-    println!("content_size in chars: {}", content_size);
+    let mut last_token_size: usize = 0;
+    let mut remeining_context_size: usize = content.chars().count();
+
+    for c in content.chars() {
+        println!("next letter: {}", c);
+    }
 
     loop {
-        println!("Try to add range: {}:{}", token_begin, token_end);
-        tokens.push(&content[token_begin..token_end]);
-        println!("Token added: {}", &content[token_begin..token_end]);
-        token_begin = token_end + 1;
-        println!("Try to find end index: {}:{}", token_begin, content_size);
-        token_end = match find_end_of_current_token(&content[token_begin..content_size]) {
-            Some(value) => value,
-            None => break,
-        };
-        token_end = token_end + (content_size - 2 - token_begin - 1);
+        let new_token = get_next_token(&content[last_token_size..remeining_context_size]);
+        match new_token {
+            Some(value) => {
+                tokens.push(value);
+                last_token_size = value.chars().count() + 1;
+                println!("Token added: {}, size: {}", value, last_token_size);
+                //remeining_context_size = remeining_context_size - last_token_size;
+            },
+            None => break
+        }
     }
 
     tokens
@@ -33,6 +35,19 @@ pub fn find_beggining_of_next_token(content: &str) -> Option<usize> {
             }
         }
         None => None,
+    }
+}
+
+pub fn get_next_token(content: &str) -> Option<&str> {
+    println!("Searching for next token in slice: {}", content);
+    println!("-----------------------------------------------");
+    let is_end_of_token = |c: char| {
+        return c.is_whitespace() || c == ';' || c == '.' || c == ':';
+    };
+
+    match content.find(is_end_of_token) {
+        Some(value) => return Some(&content[0..value]),
+        None => {println!("End of token not found"); None}
     }
 }
 
