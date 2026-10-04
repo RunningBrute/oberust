@@ -17,8 +17,8 @@ pub fn tokenize(content: &str) -> Vec<&str> {
                 last_token_size = value.chars().count() + 1;
                 println!("Token added: {}, size: {}", value, last_token_size);
                 //remeining_context_size = remeining_context_size - last_token_size;
-            },
-            None => break
+            }
+            None => break,
         }
     }
 
@@ -47,7 +47,10 @@ pub fn get_next_token(content: &str) -> Option<&str> {
 
     match content.find(is_end_of_token) {
         Some(value) => return Some(&content[0..value]),
-        None => {println!("End of token not found"); None}
+        None => {
+            println!("End of token not found");
+            None
+        }
     }
 }
 
