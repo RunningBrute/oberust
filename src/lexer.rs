@@ -9,14 +9,13 @@ pub fn tokenize(content: &str) -> Vec<&str> {
 
     loop {
         if last_token_size > context_size {
-            break
+            break;
         }
 
         for (_i, c) in content[last_token_size..context_size].char_indices() {
             if c.is_whitespace() {
                 last_token_size = last_token_size + 1;
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -30,7 +29,7 @@ pub fn tokenize(content: &str) -> Vec<&str> {
             }
             None => {
                 tokens.push(&content[last_token_size..context_size]);
-                break
+                break;
             }
         }
     }
@@ -45,7 +44,7 @@ pub fn get_next_token(content: &str) -> Option<&str> {
         return c.is_whitespace() || c == ';' || c == '.' || c == ':';
     };
 
-    if content.starts_with(&[';',',','.',':']){
+    if content.starts_with(&[';', ',', '.', ':']) {
         return Some(&content[0..1]);
     }
 
@@ -88,11 +87,10 @@ mod tests {
     pub fn only_termination_token_exist() {
         let contents = vec![",", ";", ".", ":"];
 
-        for content in contents{
+        for content in contents {
             let tokens = tokenize(&content);
             assert_eq!(tokens[0], content);
         }
-        
     }
 
     #[test]
