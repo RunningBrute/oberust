@@ -1,41 +1,41 @@
-use std::fmt::Error;
-
 pub fn tokenize(content: &str) -> Vec<&str> {
     let mut tokens: Vec<&str> = Vec::new();
     let mut last_token_size: usize = 0;
-    let mut remeining_context_size: usize = content.chars().count();
+    let context_size: usize = content.chars().count();
 
-    for c in content.chars() {
-        println!("next letter: {}", c);
+    if content.is_empty() {
+        return Vec::new();
     }
 
     loop {
-        let new_token = get_next_token(&content[last_token_size..remeining_context_size]);
+        if last_token_size > context_size {
+            break
+        }
+
+        for (_i, c) in content[last_token_size..context_size].char_indices() {
+            if c.is_whitespace() {
+                last_token_size = last_token_size + 1;
+            }
+            else {
+                break;
+            }
+        }
+
+        let new_token = get_next_token(&content[last_token_size..context_size]);
         match new_token {
             Some(value) => {
                 tokens.push(value);
-                last_token_size = value.chars().count() + 1;
+                last_token_size = last_token_size + value.chars().count();
                 println!("Token added: {}, size: {}", value, last_token_size);
-                //remeining_context_size = remeining_context_size - last_token_size;
             }
-            None => break,
+            None => {
+                tokens.push(&content[last_token_size..context_size]);
+                break
+            }
         }
     }
 
     tokens
-}
-
-pub fn find_beggining_of_next_token(content: &str) -> Option<usize> {
-    match content.find(|c: char| c.is_whitespace()) {
-        Some(value) => {
-            if value < content.chars().count() - 1 {
-                return Some(value + 1);
-            } else {
-                return None;
-            }
-        }
-        None => None,
-    }
 }
 
 pub fn get_next_token(content: &str) -> Option<&str> {
@@ -44,6 +44,10 @@ pub fn get_next_token(content: &str) -> Option<&str> {
     let is_end_of_token = |c: char| {
         return c.is_whitespace() || c == ';' || c == '.' || c == ':';
     };
+
+    if content.starts_with(&[';',',','.',':']){
+        return Some(&content[0..1]);
+    }
 
     match content.find(is_end_of_token) {
         Some(value) => return Some(&content[0..value]),
@@ -54,18 +58,9 @@ pub fn get_next_token(content: &str) -> Option<&str> {
     }
 }
 
-pub fn find_end_of_current_token(content: &str) -> Option<usize> {
-    println!("Searching slice: {}", content);
-    match content.find(|c: char| c.is_whitespace()) {
-        Some(value) => Some(value),
-        None => None,
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use crate::lexer::tokenize;
-    use crate::lexer::{find_beggining_of_next_token, find_end_of_current_token};
 
     #[test]
     pub fn check_if_i_understand_whitspace_correctly() {
@@ -74,39 +69,23 @@ mod tests {
     }
 
     #[test]
-    pub fn find_text_token_starting_index() {
-        let content = String::from("foo bar foo");
-        let next_token_idx = find_beggining_of_next_token(&content);
+    pub fn no_tokens_exist() {
+        let content = String::from("");
+        let tokens = tokenize(&content);
 
-        assert_eq!(next_token_idx, Some(4));
+        assert_eq!(tokens.is_empty(), true);
     }
 
     #[test]
-    pub fn find_text_token_starting_index_for_single_token() {
-        let content = String::from("fooBar");
-        let next_token_idx = find_beggining_of_next_token(&content);
+    pub fn only_one_simple_token_exist() {
+        let content = String::from("foo");
+        let tokens = tokenize(&content);
 
-        assert_eq!(next_token_idx, None);
+        assert_eq!(tokens, vec!("foo"));
     }
 
     #[test]
-    pub fn find_text_token_ending_index_for_single_token() {
-        let content = String::from("fooBar");
-        let end_token_idx = find_end_of_current_token(&content);
-
-        assert_eq!(end_token_idx, Some(5));
-    }
-
-    #[test]
-    pub fn find_text_token_ending_index_for_multiple_tokens() {
-        let content = String::from("foo bar foo");
-        let end_token_idx = find_end_of_current_token(&content);
-
-        assert_eq!(end_token_idx, Some(3));
-    }
-
-    #[test]
-    pub fn simple_tokenization_of_the_input() {
+    pub fn multiple_simple_tokens_exist() {
         let content = String::from("foo bar foo");
         let tokens = tokenize(&content);
 
