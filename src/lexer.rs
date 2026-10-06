@@ -85,6 +85,17 @@ mod tests {
     }
 
     #[test]
+    pub fn only_termination_token_exist() {
+        let contents = vec![",", ";", ".", ":"];
+
+        for content in contents{
+            let tokens = tokenize(&content);
+            assert_eq!(tokens[0], content);
+        }
+        
+    }
+
+    #[test]
     pub fn multiple_simple_tokens_exist() {
         let content = String::from("foo bar foo");
         let tokens = tokenize(&content);
