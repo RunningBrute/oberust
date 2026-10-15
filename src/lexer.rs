@@ -28,7 +28,9 @@ pub fn tokenize(content: &str) -> Vec<&str> {
                 println!("Token added: {}, size: {}", value, last_token_size);
             }
             None => {
-                tokens.push(&content[last_token_size..context_size]);
+                if last_token_size != context_size {
+                    tokens.push(&content[last_token_size..context_size]);
+                }
                 break;
             }
         }
