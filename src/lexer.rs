@@ -3,10 +3,6 @@ pub fn tokenize(content: &str) -> Vec<&str> {
     let mut last_token_size: usize = 0;
     let context_size: usize = content.chars().count();
 
-    if content.is_empty() {
-        return Vec::new();
-    }
-
     loop {
         if last_token_size > context_size {
             break;
