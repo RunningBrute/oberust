@@ -10,13 +10,9 @@ mod tests {
         let tokens = tokenize(&content);
 
         assert_eq!(tokens.len(), 7);
-        assert_eq!(tokens[0], "MODULE");
-        assert_eq!(tokens[1], "Empty");
-        assert_eq!(tokens[2], ";");
+        assert_eq!(tokens[0..3], ["MODULE", "Empty", ";"]);
         assert_eq!(tokens[3], "BEGIN");
-        assert_eq!(tokens[4], "END");
-        assert_eq!(tokens[5], "Empty");
-        assert_eq!(tokens[6], ".");
+        assert_eq!(tokens[4..7], ["END", "Empty", "."]);
     }
 
     #[test]
@@ -26,30 +22,14 @@ mod tests {
 
         let tokens = tokenize(&content);
 
-        assert_eq!(tokens.len(), 24);
-        assert_eq!(tokens[0], "MODULE");
-        assert_eq!(tokens[1], "Variables");
-        assert_eq!(tokens[2], ";");
+        assert_eq!(tokens[0..3], ["MODULE", "Variables", ";"]);
         assert_eq!(tokens[3], "VAR");
-        assert_eq!(tokens[4], "x");
-        assert_eq!(tokens[5], ",");
-        assert_eq!(tokens[6], "y");
-        assert_eq!(tokens[7], ":");
-        assert_eq!(tokens[8], "INTEGER");
-        assert_eq!(tokens[9], ";");
+        assert_eq!(tokens[4..10], ["x", ",", "y", ":", "INTEGER", ";"]);
         assert_eq!(tokens[10], "BEGIN");
-        assert_eq!(tokens[11], "x");
-        assert_eq!(tokens[12], ":=");
-        assert_eq!(tokens[13], "10");
-        assert_eq!(tokens[14], ";");
-        assert_eq!(tokens[15], "y");
-        assert_eq!(tokens[16], ":=");
-        assert_eq!(tokens[17], "x");
-        assert_eq!(tokens[18], "+");
-        assert_eq!(tokens[19], "20");
-        assert_eq!(tokens[20], ";");
-        assert_eq!(tokens[21], "END");
-        assert_eq!(tokens[22], "Variables");
-        assert_eq!(tokens[23], ".");
+        assert_eq!(tokens[11..15], ["x", ":=", "10", ";"]);
+        assert_eq!(tokens[15..21], ["y", ":=", "x", "+", "20", ";"]);
+        assert_eq!(tokens[21..24], ["END", "Variables", "."]);
+
+        assert_eq!(tokens.len(), 24);
     }
 }
