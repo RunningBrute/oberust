@@ -60,12 +60,6 @@ mod tests {
     use crate::lexer::tokenize;
 
     #[test]
-    pub fn check_if_i_understand_whitspace_correctly() {
-        assert_eq!(' '.is_whitespace(), true);
-        assert_eq!('\n'.is_whitespace(), true);
-    }
-
-    #[test]
     pub fn no_tokens_exist() {
         let content = String::from("");
         let tokens = tokenize(&content);
