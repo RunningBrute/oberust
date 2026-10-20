@@ -68,6 +68,14 @@ mod tests {
     }
 
     #[test]
+    pub fn no_tokens_exist_just_spaces() {
+        let content = String::from("\n \t   \n  ");
+        let tokens = tokenize(&content);
+
+        assert_eq!(tokens.is_empty(), true);
+    }
+
+    #[test]
     pub fn only_one_simple_token_exist() {
         let content = String::from("foo");
         let tokens = tokenize(&content);
@@ -91,6 +99,14 @@ mod tests {
             let tokens = tokenize(&content);
             assert_eq!(tokens[0], content);
         }
+    }
+
+    #[test]
+    pub fn multiple_termination_tokens_should_be_ok_too() {
+        let content = String::from(".:;");
+        let tokens = tokenize(&content);
+
+        assert_eq!(tokens, vec!(".", ":", ";"));
     }
 
     #[test]
