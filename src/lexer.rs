@@ -43,6 +43,9 @@ pub fn get_next_token(content: &str) -> Option<&str> {
     };
 
     if content.starts_with(&[';', ',', '.', ':']) {
+        if content.len() > 1 && &content[0..2] == ":=" {
+            return Some(&content[0..2]);
+        }
         return Some(&content[0..1]);
     }
 
@@ -115,6 +118,14 @@ mod tests {
         let tokens = tokenize(&content);
 
         assert_eq!(tokens, vec!("foo", "bar", "foo"));
+    }
+
+    #[test]
+    pub fn assign_operator_works() {
+        let content = String::from("x := 42");
+        let tokens = tokenize(&content);
+
+        assert_eq!(tokens, vec!("x", ":=", "42"));
     }
 
     #[test]
