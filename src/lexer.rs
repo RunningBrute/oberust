@@ -76,6 +76,14 @@ mod tests {
     }
 
     #[test]
+    pub fn one_simple_and_one_termination_token() {
+        let content = String::from("foo.");
+        let tokens = tokenize(&content);
+
+        assert_eq!(tokens, vec!("foo", "."));
+    }
+
+    #[test]
     pub fn only_termination_token_exist() {
         let contents = vec![",", ";", ".", ":"];
 
@@ -91,5 +99,21 @@ mod tests {
         let tokens = tokenize(&content);
 
         assert_eq!(tokens, vec!("foo", "bar", "foo"));
+    }
+
+    #[test]
+    pub fn multiple_simple_tokens_exist_with_termination_tokens() {
+        let content = String::from("foo; bar foo.");
+        let tokens = tokenize(&content);
+
+        assert_eq!(tokens, vec!("foo", ";", "bar", "foo", "."));
+    }
+
+    #[test]
+    pub fn whitespaces_should_be_ommited() {
+        let content = String::from("foo;  \t  bar: foo . \n \n");
+        let tokens = tokenize(&content);
+
+        assert_eq!(tokens, vec!("foo", ";", "bar", ":", "foo", "."));
     }
 }
