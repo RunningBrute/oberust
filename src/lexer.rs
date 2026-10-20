@@ -39,7 +39,7 @@ pub fn get_next_token(content: &str) -> Option<&str> {
     println!("Searching for next token in slice: {}", content);
     println!("-----------------------------------------------");
     let is_end_of_token = |c: char| {
-        return c.is_whitespace() || c == ';' || c == '.' || c == ':';
+        return c.is_whitespace() || c == ';' || c == '.' || c == ':' || c == ',';
     };
 
     if content.starts_with(&[';', ',', '.', ':']) {
