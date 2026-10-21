@@ -95,6 +95,14 @@ mod tests {
     }
 
     #[test]
+    pub fn termination_token_in_the_middle_of_another() {
+        let content = String::from("foo;bar");
+        let tokens = tokenize(&content);
+
+        assert_eq!(tokens, vec!("foo", ";", "bar"));
+    }
+
+    #[test]
     pub fn only_termination_token_exist() {
         let contents = vec![",", ";", ".", ":"];
 
